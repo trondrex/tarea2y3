@@ -1,0 +1,3 @@
+changua si se te olvida copiar esto seria asi :
+
+git clone http://github.com/trondrex/tarea2y3
