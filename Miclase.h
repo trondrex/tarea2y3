@@ -7,14 +7,13 @@ class Miclase
 
 public: 
     Miclase(); 
-    void generador_funciones();
-    char option;
-    int valor_sensor;
-    float voltaje;
+    void osciloscopio();
 private:
     //char canal1;
     //char canal2;
-
+    char option;
+    int valor_sensor;
+    float voltaje;
 };
 
 

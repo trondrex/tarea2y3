@@ -1,17 +1,17 @@
 #include "Miclase.h"
 
-Miclase *miclase;
+Miclase miclase;
 void setup() 
 {
 
-//Serial.begin(9600);
-miclase=newMiclase;
+Serial.begin(9600);
+//miclase=newMiclase;
 
 }
 
 void loop() 
 {
 
-miclase->generador_funciones();
+miclase.osciloscopio();
 
 }

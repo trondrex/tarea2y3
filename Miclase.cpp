@@ -8,7 +8,7 @@ Miclase::Miclase()
    // canal2='A1';
 }
 
-void Miclase::generador_funciones()    
+void Miclase::osciloscopio()    
 {
     option = Serial.read();
     
