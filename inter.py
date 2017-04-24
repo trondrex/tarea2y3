@@ -36,17 +36,21 @@ class InterfazShield():
         self.canal=IntVar()
         self.aux = IntVar()
         self.auxi=IntVar()
-        self.h=IntVar(value=0)
-        self.xvalues = []
-        self.yvalues = []
-        self.ax = self.fig.add_subplot(1, 1, 1)
-        self.x = np.arange(0, 2*np.pi, 0.01)
+        self.tipo=IntVar(value=0)
         self.variable_canal = IntVar(value=0)
         self.ser = s.Serial('/dev/ttyACM0',9600)
-        #Empieza las variables codigo del generador
+        #Empieza las variables codigo del osciloscopio
+        self.xvalues = []
+        self.yvalues = []
         self.ax1 = self.fig1.add_subplot(1, 1, 1)
         self.ax1.set_ylim(-15,15)
         self.line1, = self.ax1.plot(self.xvalues, self.yvalues, 'g')
+        #Empieza las variables codigo del generador
+        self.xvalues1 = []
+        self.yvalues1 = []
+        self.ax = self.fig.add_subplot(1, 1, 1)
+        self.ax.set_ylim(-15,15)
+        self.line, = self.ax.plot(self.xvalues1, self.yvalues1, 'g')
 
         #Fuentes
         self.helv50=font.Font(family="Helvetica",size=75)
@@ -139,16 +143,15 @@ class InterfazShield():
 
         if  self.variable_senal.get()==1:
             print("senoidal")
-            self.fig.clear()
-            self.ani_widget()
-
-        elif    self.variable_senal.get()==2:
+            self.tipo=1
+            self.am=self.variable_voltaje.get()
+        elif self.variable_senal.get()==2:
                 print("cuadrada")
-                self.fig.clear()
+                self.tipo=2
 
-        elif    self.variable_senal.get()==3:
+        elif self.variable_senal.get()==3:
                 print("triangular")
-                self.fig.clear()
+                self.tipo=3
 
 
     def cambiar_canal(self):
@@ -159,23 +162,32 @@ class InterfazShield():
         else:
             self.canal=0
 
+#------------------------------------funciones del generador
 
     def animate(self,i):
         if self.auxi==0:
-            self.xdata=self.am*np.sin(self.x+i/10.0)
-            #self.ser.write(b,self.xdata)
-            self.line.set_ydata(self.xdata)  # update the data
-            return self.line,
+            try:
+                if self.tipo==1:
+                    self.data1 =self.am*np.sin(i/10)
+                else:
+                    self.data1=0
+                self.yvalue1 = float(self.data1)
+                self.yvalues1.append(self.yvalue1)
+                self.xvalues1.append(i)
+                self.line.set_data(self.xvalues1, self.yvalues1)
+                self.ax.set_xlim(0, i+1)
+            except ValueError:
+                pass
         else:
             pass
     def ani_widget(self):
 
-        self.am=self.variable_voltaje.get()
-        self.ax = self.fig.add_subplot(111)
-        self.line, = self.ax.plot(self.x,self.am*np.sin(self.x))
-        self.ani = animation.FuncAnimation(self.fig,self.animate,np.arange(1, 200), interval=25, blit=False)
+        self.ani = animation.FuncAnimation(self.fig, self.animate, interval=100, blit=False)
+        self.canvas.show()
+        self.ser.reset_input_buffer()
 
-
+#------------------------------------fin funciones del generador
+#------------------------------------funciones del osciloscopio
     def animate1(self,a):
         self.ser.reset_input_buffer()
         if self.auxi==1:
@@ -202,6 +214,7 @@ class InterfazShield():
         self.ser.reset_input_buffer()
 
 
+#------------------------------------ fin funciones del osciloscopio
 
 #----------Finaliza la clase que alberga la Interfaz
 if __name__ == '__main__':
