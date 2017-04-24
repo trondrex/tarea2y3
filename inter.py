@@ -35,6 +35,8 @@ class InterfazShield():
         self.variable_senal = IntVar(value=1)
         self.canal=IntVar()
         self.aux = IntVar()
+        self.auxi=IntVar()
+        self.h=IntVar(value=0)
         self.xvalues = []
         self.yvalues = []
         self.ax = self.fig.add_subplot(1, 1, 1)
@@ -115,17 +117,23 @@ class InterfazShield():
         self.bmenu3.place(x=555,y=150)
 
         #termina el bucle de la interfaz y actualiza los datos de la grafica
-
+        self.h=0
         self.ani_widget()
         self.ani_widget1()
         self.raiz.mainloop()
 
         #Metodos
+
     def comprobar(self):
         if  self.variable_menu.get()==1:
+
+            self.auxi=1
             self.panel_principal2.lift()
         else:
+
+            self.auxi=0
             self.panel_principal3.lift()
+
 
     def leer(self):
 
@@ -142,6 +150,7 @@ class InterfazShield():
                 print("triangular")
                 self.fig.clear()
 
+
     def cambiar_canal(self):
 
         if  self.variable_canal.get()==1:
@@ -150,9 +159,16 @@ class InterfazShield():
         else:
             self.canal=0
 
+
     def animate(self,i):
-        self.line.set_ydata(self.am*np.sin(self.x+i/10.0))  # update the data
-        return self.line,
+        if self.auxi==0:
+            self.xdata=self.am*np.sin(self.x+i/10.0)
+            self.ser.write(b'self.data')
+            self.line.set_ydata(self.xdata)  # update the data
+            return self.line,
+        else:
+            self.h=self.h+1
+            print(self.h)
 
     def ani_widget(self):
 
@@ -161,22 +177,26 @@ class InterfazShield():
         self.line, = self.ax.plot(self.x,self.am*np.sin(self.x))
         self.ani = animation.FuncAnimation(self.fig,self.animate,np.arange(1, 200), interval=25, blit=False)
 
-    def animate1(self,a):
-        try:
-            if  self.canal==1:
-                self.ser.write(b'0')
-            elif    self.canal==0:
-                    self.ser.write(b'1')
-            self.data = self.ser.readline()
-            self.yvalue = float(self.data)
-            self.yvalue = (4.8*self.yvalue)-12
-            self.yvalues.append(self.yvalue)
-            self.xvalues.append(a)
-            self.line1.set_data(self.xvalues, self.yvalues)
-            self.ax1.set_xlim(0, a+1)
-        except ValueError:
-            pass
 
+    def animate1(self,a):
+        self.ser.reset_input_buffer()
+        if self.auxi==1:
+            try:
+                if  self.canal==1:
+                    self.ser.write(b'6')
+                elif    self.canal==0:
+                        self.ser.write(b'7')
+                self.data = self.ser.readline()
+                self.yvalue = float(self.data)
+                self.yvalue = (4.8*self.yvalue)-12
+                self.yvalues.append(self.yvalue)
+                self.xvalues.append(a)
+                self.line1.set_data(self.xvalues, self.yvalues)
+                self.ax1.set_xlim(0, a+1)
+            except ValueError:
+                pass
+        else:
+            pass
     def ani_widget1(self):
 
         self.ani1 = animation.FuncAnimation(self.fig1, self.animate1, interval=100, blit=False)

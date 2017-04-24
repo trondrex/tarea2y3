@@ -12,7 +12,7 @@ private:
     //char canal1;
     //char canal2;
     char option;
-    int valor_sensor;
+    float valor_sensor;
     float voltaje;
 };
 
