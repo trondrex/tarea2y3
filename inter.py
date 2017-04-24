@@ -163,13 +163,11 @@ class InterfazShield():
     def animate(self,i):
         if self.auxi==0:
             self.xdata=self.am*np.sin(self.x+i/10.0)
-            self.ser.write(b'self.data')
+            #self.ser.write(b,self.xdata)
             self.line.set_ydata(self.xdata)  # update the data
             return self.line,
         else:
-            self.h=self.h+1
-            print(self.h)
-
+            pass
     def ani_widget(self):
 
         self.am=self.variable_voltaje.get()

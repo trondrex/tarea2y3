@@ -16,22 +16,26 @@ void Miclase::osciloscopio()
     
     {
     valor_sensor = analogRead(A0);
+    float voltaje = valor_sensor * (5.0 / 1023.0);
+    Serial.println(voltaje);
+    //delay(400);
     }
     
     else if (option == '7')
     
     {  
     valor_sensor = analogRead(A1);
+    float voltaje = valor_sensor * (5.0 / 1023.0);
+    Serial.println(voltaje);
+   // delay(400);
     }
     
     else
     {
-
+    Serial.println(option);
     }
 
     
-    float voltaje = valor_sensor * (5.0 / 1023.0);
-    Serial.println(voltaje);
     delay(400);
 
 }
