@@ -51,7 +51,7 @@ class InterfazShield():
         self.ax = self.fig.add_subplot(1, 1, 1)
         self.ax.set_ylim(-15,15)
         self.line, = self.ax.plot(self.xvalues1, self.yvalues1, 'g')
-        self.x=0
+        self.x=IntVar(value=0)
         #Fuentes
         self.helv50=font.Font(family="Helvetica",size=75)
         self.helv30=font.Font(family="Helvetica",size=30)
@@ -121,7 +121,7 @@ class InterfazShield():
         self.bmenu3.place(x=555,y=150)
 
         #termina el bucle de la interfaz y actualiza los datos de la grafica
-        self.h=0
+        self.x=0.0
         self.ani_widget()
         self.ani_widget1()
         self.raiz.mainloop()
@@ -176,10 +176,10 @@ class InterfazShield():
 
                     if self.x < 21:
                         self.data1=0
-                        self.x=self.x+1
+                        self.x += 1
                     elif self.x > 20 and self.x < 41:
                         self.data1=self.am
-                        self.x=self.x+1
+                        self.x += 1
                     else:
                         self.x=0
                         self.data1=0
@@ -187,9 +187,9 @@ class InterfazShield():
 
                     if self.x <= self.am:
                         self.data1=self.x
-                        self.x=self.x+1
+                        self.x += 1
                     elif self.x == self.am+1 and self.data1 > 1:
-                        self.data1=self.data1-1
+                         self.data1 -= 1
                     else:
                         self.data1=0
                         self.x=0
@@ -199,6 +199,9 @@ class InterfazShield():
                 self.xvalues1.append(i)
                 self.line.set_data(self.xvalues1, self.yvalues1)
                 self.ax.set_xlim(0, i+1)
+                self.data1=((5/24)*self.data1)-(5/2)
+                self.ser.write('self.data1'.encode('ascii'))
+
             except ValueError:
                 pass
         else:
@@ -211,6 +214,7 @@ class InterfazShield():
 
 #------------------------------------fin funciones del generador
 #------------------------------------funciones del osciloscopio
+
     def animate1(self,a):
         self.ser.reset_input_buffer()
         if self.auxi==1:

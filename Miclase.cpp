@@ -32,6 +32,8 @@ void Miclase::osciloscopio()
     
     else
     {
+    option= option * (225.0/5.0);    
+    analogWrite(8,option);
     Serial.println(option);
     }
 
