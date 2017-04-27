@@ -199,9 +199,9 @@ class InterfazShield():
                 self.xvalues1.append(i)
                 self.line.set_data(self.xvalues1, self.yvalues1)
                 self.ax.set_xlim(0, i+1)
-                self.data1=((5/24)*self.data1)-(5/2)
-                self.ser.write('self.data1'.encode('ascii'))
-
+                self.datax=((5/24)*self.data1)-(5/2)
+                self.ser.write(str(self.datax).encode('ascii'))
+                self.ser.write(b'z')
             except ValueError:
                 pass
         else:
@@ -220,9 +220,9 @@ class InterfazShield():
         if self.auxi==1:
             try:
                 if  self.canal==1:
-                    self.ser.write(b'6')
+                    self.ser.write(b'a')
                 elif    self.canal==0:
-                        self.ser.write(b'7')
+                        self.ser.write(b'b')
                 self.data = self.ser.readline()
                 self.yvalue = float(self.data)
                 self.yvalue = (4.8*self.yvalue)-12

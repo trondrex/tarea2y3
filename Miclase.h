@@ -9,11 +9,12 @@ public:
     Miclase(); 
     void osciloscopio();
 private:
-    //char canal1;
-    //char canal2;
     char option;
+    String number;
+    float volta;
     float valor_sensor;
     float voltaje;
+
 };
 
 
